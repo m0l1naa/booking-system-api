@@ -1,27 +1,23 @@
-# Utiliza una imagen base con OpenJDK 17 y Gradle 7.4.0
-FROM gradle:7.4.0-jdk17 AS build
-
-# Establece el directorio de trabajo
-WORKDIR /app
-
-# Copia los archivos de tu proyecto al directorio de trabajo
-COPY . .
-
-# Construye tu aplicación con Gradle
-RUN gradle build --no-daemon
-
-# Cambia a una imagen más ligera de OpenJDK 17 para la ejecución
+# Usa una imagen base de OpenJDK
 FROM openjdk:17-jdk-slim
 
 # Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia el archivo JAR de tu aplicación al directorio de trabajo
-COPY --from=build /app/build/libs/<nombre_jar_generado>.jar .
-COPY --from=build /app/src/main/resources/application.properties .
+# Copia el archivo pom.xml y las dependencias para realizar el build
+COPY pom.xml .
 
-# Exponer el puerto que utilizará la aplicación
+# Descarga las dependencias de Maven
+RUN mvn dependency:go-offline
+
+# Copia el código fuente del proyecto
+COPY src /app/src
+
+# Realiza el build del proyecto
+RUN mvn clean package -DskipTests
+
+# Expone el puerto en el que la aplicación va a correr
 EXPOSE 8080
 
-# Define el comando de inicio de la aplicación
-CMD ["java", "-jar", "<nombre_jar_generado>.jar"]
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "target/mi-aplicacion.jar"]
