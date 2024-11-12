@@ -1,15 +1,18 @@
 package com.ada.booking.booking_system.model.reservation;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Reservation {
     private Long id;
     private Long userId;
-    private String date;
+    private LocalDateTime date;
     private String details;
 
     public Reservation() {
     }
 
-    public Reservation(Long id, Long userId, String date, String details) {
+    public Reservation(Long id, Long userId, LocalDateTime date, String details) {
         this.id = id;
         this.userId = userId;
         this.date = date;
@@ -32,11 +35,11 @@ public class Reservation {
         this.userId = userId;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

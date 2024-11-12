@@ -2,24 +2,26 @@ package com.ada.booking.booking_system.model.user;
 
 public class User {
 
-    private Long id;
+    private String id;
     private String name;
     private String email;
+    private String password;
 
     public User() {
     }
 
-    public User(Long id, String name, String email) {
+    public User(String id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,4 +41,7 @@ public class User {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
 }

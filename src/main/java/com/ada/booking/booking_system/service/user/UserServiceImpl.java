@@ -1,49 +1,49 @@
 package com.ada.booking.booking_system.service.user;
 
 import com.ada.booking.booking_system.model.user.User;
+import com.ada.booking.booking_system.repository.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private Map<Long, User> users = new HashMap<>();
-    private Long nextId = 1L;
-
-    @Override
-    public User createUser(User user) {
-        user.setId(nextId++);
-        users.put(user.getId(), user);
-        return user;
-    }
-
-    @Override
-    public User getUser(Long id) {
-        return users.get(id);
-    }
-
-    @Override
-    public User updateUser(Long id, User user) {
-        if (users.containsKey(id)) {
-            user.setId(id);
-            users.put(id, user);
-            return user;
-        }
-        return null;
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        users.remove(id);
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<User> getAllUsers() {
-        return new ArrayList<>(users.values());
+        return userRepository.findAll();
     }
 
+    @Override
+    public User getUser(String id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User updateUser(String id, User user) {
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        if (user.getName() != null) {
+            existingUser.setName(user.getName());
+        }
+        if (user.getEmail() != null) {
+            existingUser.setEmail(user.getEmail());
+        }
+
+        return userRepository.save(existingUser);
+    }
+
+    @Override
+    public void deleteUser(String id) {
+        userRepository.deleteById(id);
+    }
 }

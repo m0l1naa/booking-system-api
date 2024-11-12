@@ -10,11 +10,11 @@ public interface ReservationService {
 
     Reservation createReservation(Reservation reservation);
 
-    Reservation getReservation(Long id);
+    Reservation getReservation(String id);
 
-    Reservation updateReservation(Long id, Reservation reservation);
+    Reservation updateReservation(String id, Reservation reservation);
 
-    void deleteReservation(Long id);
+    void deleteReservation(String id);
 
     List<Reservation> getAllReservations();
 
